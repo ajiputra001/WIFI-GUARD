@@ -75,7 +75,7 @@ function printBanner() {
   console.log(border('  ╠' + '═'.repeat(width) + '╣'));
 
   // Subtitle
-  const sub = chalk.white.bold('🛡️  WhatsApp Network Intrusion Detection System');
+  const sub = chalk.white.bold('🛡️  WhatsApp Network Alert Detection System');
   const subPadL = Math.floor((width - visibleLength(sub)) / 2);
   const subPadR = width - visibleLength(sub) - subPadL;
   console.log(border('  ║') + ' '.repeat(subPadL) + sub + ' '.repeat(subPadR) + border('║'));
@@ -98,7 +98,7 @@ function printBanner() {
   console.log(border('  ╠' + '═'.repeat(width) + '╣'));
 
   // Info line
-  const info = chalk.gray('v1.0.0 | Node.js | Real-time Netlink + Human AI Voice');
+  const info = chalk.gray('v1.0.0 | Node.js | Real-time Netlink + Human Voice Notification');
   const infoPadL = Math.floor((width - visibleLength(info)) / 2);
   const infoPadR = width - visibleLength(info) - infoPadL;
   console.log(border('  ║') + ' '.repeat(infoPadL) + info + ' '.repeat(infoPadR) + border('║'));
@@ -154,7 +154,7 @@ async function main() {
 
   // 5. Initialize WhatsApp Client
   console.log(chalk.yellow('📱 Initializing WhatsApp client...'));
-  
+
   if (!config.alertPhoneNumber) {
     console.log(chalk.red('⚠️  ALERT_PHONE_NUMBER not set in .env'));
     console.log(chalk.yellow('   Bot will run but WhatsApp alerts will be disabled'));
@@ -246,11 +246,11 @@ async function main() {
   if (config.alertPhoneNumber) {
     console.log(chalk.gray(`  📱 Alerts → ${config.alertPhoneNumber}`));
   }
-  const styleLabel = config.voiceAlertStyle === 'stasiun' 
-    ? '🚆 Suara Pengumuman Stasiun (Manusia AI)' 
-    : config.voiceAlertStyle === 'anime' 
-    ? '🌸 Anime Girl Voice' 
-    : '🎙️ Suara Manusia AI';
+  const styleLabel = config.voiceAlertStyle === 'stasiun'
+    ? '🚆 Suara Pengumuman Stasiun (Manusia AI)'
+    : config.voiceAlertStyle === 'anime'
+      ? '🌸 Anime Girl Voice'
+      : '🎙️ Suara Manusia AI';
   console.log(chalk.gray(`  🔊 Voice Alert → ${config.voiceAlertEnabled ? styleLabel : 'OFF'}`));
   if (config.dashboardEnabled) {
     console.log(chalk.gray(`  🌐 Dashboard → http://localhost:${config.dashboardPort}`));
@@ -263,18 +263,18 @@ async function main() {
   // ─────────────────────────────────────────
   const shutdown = async (signal) => {
     console.log(chalk.yellow(`\n🛑 ${signal} received. Shutting down...`));
-    
+
     alertEngine.stop();
-    
+
     if (config.alertPhoneNumber && waClient.isReady) {
       try {
         await waClient.sendAlert('🛑 *WiFi Guard Bot OFFLINE*\n\nBot telah dihentikan.');
-      } catch {}
+      } catch { }
     }
-    
+
     await waClient.destroy();
     db.close();
-    
+
     console.log(chalk.green('✅ Cleanup complete. Goodbye! 👋'));
     process.exit(0);
   };
