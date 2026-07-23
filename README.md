@@ -1,11 +1,16 @@
-# 🛡️ WiFi Guard Bot — WhatsApp & AI Voice Intrusion Detection System
+# 🛡️ WiFi Guard Bot — WhatsApp & AI Voice Network Intrusion Detection System
 
-**WiFi Guard Bot** — System Keamanan & Intrusi Jaringan Real-Time berbasis **Node.js, WhatsApp Web, dan Human AI Voice Announcement**. Memonitor setiap perangkat yang terhubung atau terputus dari Wi-Fi secara instan dan mengeluarkan notifikasi suara manusia jernih + pesan WhatsApp.
+<p align="center">
+  <img src="https://img.shields.io/github/actions/workflow/status/ajiputra001/WIFI-GUARD/ci.yml?branch=main&style=for-the-badge&logo=github&label=CI/CD%20Build" alt="Build Status" />
+  <img src="https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Linux-Debian%20%7C%20Ubuntu-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux OS" />
+  <img src="https://img.shields.io/badge/Cybersecurity-IDS Engine-red?style=for-the-badge&logo=shield" alt="Cybersecurity" />
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License" />
+</p>
 
-![Node.js](https://img.shields.io/badge/Node.js-18+-green)
-![Debian](https://img.shields.io/badge/Debian-11%20%7C%2012%20%7C%2013-red)
-![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%20%7C%2022.04%20%7C%2024.04-orange)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+---
+
+**WiFi Guard Bot** adalah sistem **Intrusion Detection System (IDS) Keamanan Jaringan Real-Time** berbasis **Node.js, WhatsApp Web, dan Human AI Voice Announcement**. Sistem ini memonitor setiap perangkat yang masuk, terhubung kembali, atau terputus dari jaringan Wi-Fi secara instan, serta mengeluarkan notifikasi suara manusia jernih + pesan WhatsApp otomatis.
 
 ---
 
@@ -13,7 +18,7 @@
 
 - 🔍 **Real-time Network Scanning** — Scan instan kernel netlink ARP & DNS resolution (<15ms)
 - 🚆 **Human AI Voice Announcement** — Suara pengumuman jernih manusia (Gaya Stasiun Kereta / Google Neural AI)
-- 🧠 **Smart Device Identification** — Identifikasi otomatis nama perangkat (`OPPO F11`, `Redmi A3`, `Galaxy A03s`), vendor, & tipe
+- 🧠 **Smart Device Identification** — Identifikasi otomatis nama perangkat (`OPPO F11`, `Redmi A3`, `Galaxy A03s`, `Redmi Note 14`), vendor, & tipe
 - 📱 **WhatsApp Alert** — Notifikasi instan via pesan perorangan atau ID Grup WhatsApp
 - 🤖 **WhatsApp Command System** — Perintah bot langsung via chat WhatsApp (`!status`, `!devices`, `!block`, dll)
 - 🌐 **Web Dashboard** — Monitoring real-time UI Cyber Security Dark Mode (`http://localhost:3000`)
@@ -29,8 +34,8 @@ Cukup clone repository lalu jalankan script installer otomatis 1-klik:
 
 ```bash
 # 1. Clone repository
-git clone <URL_REPOSITORY_ANDA>
-cd "PROJECT-LAB 1"
+git clone https://github.com/ajiputra001/WIFI-GUARD.git
+cd WIFI-GUARD
 
 # 2. Jalankan installer otomatis (Semua dependensi terinstall otomatis!)
 sudo bash install.sh
