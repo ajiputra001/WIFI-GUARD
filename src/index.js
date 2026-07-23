@@ -45,9 +45,24 @@ const config = {
   voiceAlertOnDisconnect: process.env.VOICE_ALERT_ON_DISCONNECT === 'true',
 };
 
-// Helper to strip ANSI codes to get true visible character count
-function visibleLength(str) {
-  return str.replace(/\u001b\[[0-9;]*m/g, '').replace(/[\u0300-\u036f]/g, '').length;
+// Helper to strip ANSI codes and calculate true terminal column display width (handles Emojis & ANSI)
+function getDisplayWidth(str) {
+  const clean = str.replace(/\u001b\[[0-9;]*m/g, '');
+  let width = 0;
+  for (let i = 0; i < clean.length; i++) {
+    const cp = clean.codePointAt(i);
+    if (cp > 0xffff) {
+      width += 2; // Emoji surrogate pair (2 display columns in terminal)
+      i++;
+    } else if (cp >= 0xfe00 && cp <= 0xfe0f) {
+      // Variation selector (0 display width)
+    } else if ((cp >= 0x2600 && cp <= 0x27bf) || (cp >= 0x2300 && cp <= 0x23ff) || (cp >= 0x2b50 && cp <= 0x2b55)) {
+      width += 2; // Symbols / emojis taking 2 columns in terminal
+    } else {
+      width += 1;
+    }
+  }
+  return width;
 }
 
 // ─────────────────────────────────────────
@@ -63,7 +78,7 @@ function printBanner() {
   // ASCII Art lines with Slant font
   const artLines = figlet.textSync('WiFi Guard', { font: 'Slant', horizontalLayout: 'default' }).split('\n');
   for (const line of artLines) {
-    const vLen = visibleLength(line);
+    const vLen = getDisplayWidth(line);
     if (vLen > 0 && vLen <= width) {
       const leftPad = Math.floor((width - vLen) / 2);
       const rightPad = width - vLen - leftPad;
@@ -76,8 +91,8 @@ function printBanner() {
 
   // Subtitle
   const sub = chalk.white.bold('🛡️  WhatsApp Network Alert Detection System');
-  const subPadL = Math.floor((width - visibleLength(sub)) / 2);
-  const subPadR = width - visibleLength(sub) - subPadL;
+  const subPadL = Math.floor((width - getDisplayWidth(sub)) / 2);
+  const subPadR = width - getDisplayWidth(sub) - subPadL;
   console.log(border('  ║') + ' '.repeat(subPadL) + sub + ' '.repeat(subPadR) + border('║'));
 
   // Divider
@@ -85,13 +100,13 @@ function printBanner() {
 
   // Developer Badge
   const dev1 = chalk.hex('#FFD700').bold('⚡ Developed by ') + chalk.hex('#00E5FF').bold('AJIPUTRA-TECH') + chalk.hex('#FFD700').bold(' ⚡');
-  const dev1PadL = Math.floor((width - visibleLength(dev1)) / 2);
-  const dev1PadR = width - visibleLength(dev1) - dev1PadL;
+  const dev1PadL = Math.floor((width - getDisplayWidth(dev1)) / 2);
+  const dev1PadR = width - getDisplayWidth(dev1) - dev1PadL;
   console.log(border('  ║') + ' '.repeat(dev1PadL) + dev1 + ' '.repeat(dev1PadR) + border('║'));
 
   const dev2 = chalk.hex('#90A4AE')('Cybersecurity Division');
-  const dev2PadL = Math.floor((width - visibleLength(dev2)) / 2);
-  const dev2PadR = width - visibleLength(dev2) - dev2PadL;
+  const dev2PadL = Math.floor((width - getDisplayWidth(dev2)) / 2);
+  const dev2PadR = width - getDisplayWidth(dev2) - dev2PadL;
   console.log(border('  ║') + ' '.repeat(dev2PadL) + dev2 + ' '.repeat(dev2PadR) + border('║'));
 
   // Divider
@@ -99,8 +114,8 @@ function printBanner() {
 
   // Info line
   const info = chalk.gray('v1.0.0 | Node.js | Real-time Netlink + Human Voice Notification');
-  const infoPadL = Math.floor((width - visibleLength(info)) / 2);
-  const infoPadR = width - visibleLength(info) - infoPadL;
+  const infoPadL = Math.floor((width - getDisplayWidth(info)) / 2);
+  const infoPadR = width - getDisplayWidth(info) - infoPadL;
   console.log(border('  ║') + ' '.repeat(infoPadL) + info + ' '.repeat(infoPadR) + border('║'));
 
   console.log(border('  ╚' + '═'.repeat(width) + '╝'));
