@@ -45,41 +45,65 @@ const config = {
   voiceAlertOnDisconnect: process.env.VOICE_ALERT_ON_DISCONNECT === 'true',
 };
 
+// Helper to strip ANSI codes to get true visible character count
+function visibleLength(str) {
+  return str.replace(/\u001b\[[0-9;]*m/g, '').replace(/[\u0300-\u036f]/g, '').length;
+}
+
 // ─────────────────────────────────────────
 // Print Banner — AJIPUTRA-TECH
 // ─────────────────────────────────────────
 function printBanner() {
-  const line = '═'.repeat(58);
-  const thin = '─'.repeat(58);
-  
+  const width = 64;
+  const border = chalk.cyan;
+
   console.log('');
-  console.log(chalk.cyan(`  ╔${line}╗`));
-  console.log(chalk.cyan(`  ║`) + ' '.repeat(58) + chalk.cyan(`║`));
+  console.log(border('  ╔' + '═'.repeat(width) + '╗'));
 
-  // WiFi Guard ASCII Art
-  const artLines = figlet.textSync('WiFi Guard', {
-    font: 'Small',
-    horizontalLayout: 'default',
-  }).split('\n');
-
-  for (const artLine of artLines) {
-    const padded = artLine.padEnd(58).substring(0, 58);
-    console.log(chalk.cyan(`  ║`) + chalk.cyanBright.bold(padded) + chalk.cyan(`║`));
+  // ASCII Art lines with Slant font
+  const artLines = figlet.textSync('WiFi Guard', { font: 'Slant', horizontalLayout: 'default' }).split('\n');
+  for (const line of artLines) {
+    const vLen = visibleLength(line);
+    if (vLen > 0 && vLen <= width) {
+      const leftPad = Math.floor((width - vLen) / 2);
+      const rightPad = width - vLen - leftPad;
+      console.log(border('  ║') + ' '.repeat(leftPad) + chalk.cyanBright.bold(line) + ' '.repeat(rightPad) + border('║'));
+    }
   }
 
-  console.log(chalk.cyan(`  ║`) + ' '.repeat(58) + chalk.cyan(`║`));
-  console.log(chalk.cyan(`  ║`) + chalk.gray(`  ${thin.substring(0, 54)}  `) + chalk.cyan(`║`));
-  console.log(chalk.cyan(`  ║`) + chalk.white.bold('    🛡️  WhatsApp Network Intrusion Detection System  ') + chalk.cyan(`  ║`));
-  console.log(chalk.cyan(`  ║`) + chalk.gray(`  ${thin.substring(0, 54)}  `) + chalk.cyan(`║`));
-  console.log(chalk.cyan(`  ║`) + ' '.repeat(58) + chalk.cyan(`║`));
-  console.log(chalk.cyan(`  ║`) + chalk.hex('#FF6B00').bold('    ╔══════════════════════════════════════════════╗  ') + chalk.cyan(`║`));
-  console.log(chalk.cyan(`  ║`) + chalk.hex('#FF6B00').bold('    ║') + chalk.hex('#FFD700').bold('   ⚡ Developed by ') + chalk.hex('#00E5FF').bold('AJIPUTRA-TECH') + chalk.hex('#FFD700').bold(' ⚡        ') + chalk.hex('#FF6B00').bold('║') + chalk.cyan(`  ║`));
-  console.log(chalk.cyan(`  ║`) + chalk.hex('#FF6B00').bold('    ║') + chalk.hex('#90A4AE')('       Cybersecurity Division             ') + chalk.hex('#FF6B00').bold('║') + chalk.cyan(`  ║`));
-  console.log(chalk.cyan(`  ║`) + chalk.hex('#FF6B00').bold('    ╚══════════════════════════════════════════════╝  ') + chalk.cyan(`║`));
-  console.log(chalk.cyan(`  ║`) + ' '.repeat(58) + chalk.cyan(`║`));
-  console.log(chalk.cyan(`  ║`) + chalk.gray('    v1.0.0 | Node.js | arp-scan + nmap + WhatsApp    ') + chalk.cyan(`  ║`));
-  console.log(chalk.cyan(`  ║`) + ' '.repeat(58) + chalk.cyan(`║`));
-  console.log(chalk.cyan(`  ╚${line}╝`));
+  // Divider
+  console.log(border('  ╠' + '═'.repeat(width) + '╣'));
+
+  // Subtitle
+  const sub = chalk.white.bold('🛡️  WhatsApp Network Intrusion Detection System');
+  const subPadL = Math.floor((width - visibleLength(sub)) / 2);
+  const subPadR = width - visibleLength(sub) - subPadL;
+  console.log(border('  ║') + ' '.repeat(subPadL) + sub + ' '.repeat(subPadR) + border('║'));
+
+  // Divider
+  console.log(border('  ╠' + '═'.repeat(width) + '╣'));
+
+  // Developer Badge
+  const dev1 = chalk.hex('#FFD700').bold('⚡ Developed by ') + chalk.hex('#00E5FF').bold('AJIPUTRA-TECH') + chalk.hex('#FFD700').bold(' ⚡');
+  const dev1PadL = Math.floor((width - visibleLength(dev1)) / 2);
+  const dev1PadR = width - visibleLength(dev1) - dev1PadL;
+  console.log(border('  ║') + ' '.repeat(dev1PadL) + dev1 + ' '.repeat(dev1PadR) + border('║'));
+
+  const dev2 = chalk.hex('#90A4AE')('Cybersecurity Division');
+  const dev2PadL = Math.floor((width - visibleLength(dev2)) / 2);
+  const dev2PadR = width - visibleLength(dev2) - dev2PadL;
+  console.log(border('  ║') + ' '.repeat(dev2PadL) + dev2 + ' '.repeat(dev2PadR) + border('║'));
+
+  // Divider
+  console.log(border('  ╠' + '═'.repeat(width) + '╣'));
+
+  // Info line
+  const info = chalk.gray('v1.0.0 | Node.js | Real-time Netlink + Human AI Voice');
+  const infoPadL = Math.floor((width - visibleLength(info)) / 2);
+  const infoPadR = width - visibleLength(info) - infoPadL;
+  console.log(border('  ║') + ' '.repeat(infoPadL) + info + ' '.repeat(infoPadR) + border('║'));
+
+  console.log(border('  ╚' + '═'.repeat(width) + '╝'));
   console.log('');
 }
 
