@@ -47,15 +47,13 @@ const config = {
 
 // Helper to strip ANSI codes and calculate true terminal column display width (handles Emojis & ANSI)
 function getDisplayWidth(str) {
-  const clean = str.replace(/\u001b\[[0-9;]*m/g, '');
+  const clean = str.replace(/\u001b\[[0-9;]*m/g, '').replace(/\uFE0F/g, '');
   let width = 0;
   for (let i = 0; i < clean.length; i++) {
     const cp = clean.codePointAt(i);
     if (cp > 0xffff) {
       width += 2; // Emoji surrogate pair (2 display columns in terminal)
       i++;
-    } else if (cp >= 0xfe00 && cp <= 0xfe0f) {
-      // Variation selector (0 display width)
     } else if ((cp >= 0x2600 && cp <= 0x27bf) || (cp >= 0x2300 && cp <= 0x23ff) || (cp >= 0x2b50 && cp <= 0x2b55)) {
       width += 2; // Symbols / emojis taking 2 columns in terminal
     } else {
@@ -90,7 +88,7 @@ function printBanner() {
   console.log(border('  ╠' + '═'.repeat(width) + '╣'));
 
   // Subtitle
-  const sub = chalk.white.bold('🛡️  WhatsApp Network Alert Detection System');
+  const sub = chalk.white.bold('🛡  WhatsApp Network Alert Detection System');
   const subPadL = Math.floor((width - getDisplayWidth(sub)) / 2);
   const subPadR = width - getDisplayWidth(sub) - subPadL;
   console.log(border('  ║') + ' '.repeat(subPadL) + sub + ' '.repeat(subPadR) + border('║'));
